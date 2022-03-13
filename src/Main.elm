@@ -1,58 +1,61 @@
-module Main exposing (..)
+{- 
+ - what do I want to make?
+ - Hmm. I have no idea. What are good beginner elm projects? 
+ -
+ - How about reading from a CSV file and writing some data to the webpage? Will
+ - be a good check on how elm works and file loading and stuff, required for 
+ - the project finally.  
+ - 
+ -}
+
+-- three dots allow us to expose all the functions in this module
+module Main exposing (..) 
 
 import Browser
-import Html exposing (Html, button, div, text)
+import Html exposing (..)
 import Html.Events exposing (onClick)
 
-
-
--- MAIN
-
-
 main =
-    Browser.sandbox { init = init, update = update, view = view }
-
-
+  Browser.sandbox {init = init, update = update, model = model}
 
 -- MODEL
 
+type alias Model = {
+  code: String,
+  name: String,
+  credits: Float,
+  credit_structure: String,
+  description: String  
+}
 
-type alias Model =
-    Int
-
-
-init : Model
+init: Model
 init =
-    0
-
-
+  {code: "NONE", name: "NONE", credits: 0, credit_structure: "0-0-0", description: "NONE"}
 
 -- UPDATE
 
+type Msg = Update of String
 
-type Msg
-    = Increment
-    | Decrement
-
-
-update : Msg -> Model -> Model
-update msg model =
-    case msg of
-        Increment ->
-            model + 1
-
-        Decrement ->
-            model - 1
-
-
+update: Msg -> Model 
+update (Update code)  =
+  -- fetch file
+  -- fetch course from file
+  -- update the model
 
 -- VIEW
 
-
 view : Model -> Html Msg
 view model =
-    div []
-        [ button [ onClick Decrement ] [ text "-" ]
-        , div [] [ text (String.fromInt model) ]
-        , button [ onClick Increment ] [ text "+" ]
-        ]
+  div []
+    [ div [] 
+      [ input [ placeholder "Course Name", value model.code ]
+      , button [ onClick Update ] [ text "Get Course Info" ]
+      ]
+    , div [] 
+      [ label [ value model.code ]
+      , label [ value model.name ]
+      , label [ value String.fromFloat model.credits ]
+      , label [ value model.credit_structure ]
+      , label [ value model.description ]
+      ]
+    ]
